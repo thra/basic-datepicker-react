@@ -1,4 +1,4 @@
-# basic-datepicker-react
+# Basic Datepicker React
 
 A simple and basic reusable datepicker component using react
 
