@@ -1,4 +1,5 @@
-import { React, useEffect, useRef, useState } from 'react'
+import React from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { weekDays, dateFormat, years, months, handleSetDays } from './utils'
 import './Datepicker.scss'
 
