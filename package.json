@@ -1,6 +1,8 @@
 {
   "name": "basic-datepicker-react",
-  "version": "0.1.1",
+  "description": "A simple and basic reusable datepicker component using react",
+  "author": "thra",
+  "version": "0.1.2",
   "private": false,
   "main": "build/index.js",
   "module": "build/index.js",
@@ -12,12 +14,19 @@
     "type": "git",
     "url": "git+https://github.com/thra/basic-datepicker-react.git"
   },
+  "keywords": [
+    "react",
+    "components",
+    "ui",
+    "datepicker"
+  ],
   "scripts": {
     "start": "cross-env PORT=9091 react-scripts start",
     "build-examples": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build": "cross-env NODE_ENV=production babel --presets @babel/preset-react src/lib --out-dir build --copy-files --ignore __tests__,spec.js,test.js,__snapshots__"
+    "oldBuild": "cross-env NODE_ENV=production babel --presets @babel/preset-react src/lib --out-dir build --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
+    "build": "rm -rf build && cross-env NODE_ENV=production babel src/lib --out-dir build --copy-files"
   },
   "eslintConfig": {
     "extends": [
@@ -40,6 +49,7 @@
   "devDependencies": {
     "@babel/cli": "^7.19.3",
     "@babel/core": "^7.19.3",
+    "@babel/preset-env": "^7.19.3",
     "@babel/preset-react": "^7.18.6",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -56,6 +66,11 @@
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "sass": "^1.54.4"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "peerDependencies": {
     "react": "^18.2.0",
