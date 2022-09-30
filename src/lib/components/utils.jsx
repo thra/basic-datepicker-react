@@ -57,4 +57,28 @@ const months = (locales = 'en') => {
   return array
 }
 
-export { years, weekDays, months, dateFormat }
+/**
+ * By default init days calendar in function of current date
+ * @returns {Array} Array of String Date format 'mm/dd/yyyy' example ['09/01/2020', '09/02/2020',...]
+ */
+const handleSetDays = (value = new Date()) => {
+  const days = Array(42)
+  const firstDay = new Date(value.setDate(1))
+
+  // handle first Week
+  // complete start of the first week from first day of the month
+  for (let i = 0; i <= firstDay.getDay(); i++) {
+    const yesterday = new Date(
+      new Date(firstDay).setDate(firstDay.getDate() - i)
+    )
+    days[firstDay.getDay() - i] = dateFormat('en', yesterday)
+  }
+  // complete remainder of the days
+  for (let i = firstDay.getDay() + 1; i < days.length; i++) {
+    const tomorrow = new Date(firstDay.setDate(firstDay.getDate() + 1))
+    days[i] = dateFormat('en', tomorrow)
+  }
+  return days
+}
+
+export { years, weekDays, months, dateFormat, handleSetDays }
