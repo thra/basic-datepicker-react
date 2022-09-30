@@ -2,6 +2,16 @@
   "name": "basic-datepicker-react",
   "version": "0.1.0",
   "private": false,
+  "main": "build/index.js",
+  "module": "build/index.js",
+  "files": [
+    "build",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thra/basic-datepicker-react.git"
+  },
   "scripts": {
     "start": "cross-env PORT=9091 react-scripts start",
     "build-examples": "react-scripts build",
