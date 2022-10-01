@@ -38,8 +38,14 @@ const Datepicker = ({ id, selected, onChange = (data) => {} }) => {
       onChange(dateFormat('en', new Date(date)))
     }
   }
-  const handleMonthSelect = (e) => setMonth(e.target.value)
-  const handleYearSelect = (e) => setYear(e.target.value)
+  const handleMonthSelect = (e) => {
+    setMonth(e.target.value)
+    updateDapickerUI(new Date(year, e.target.value, 1))
+  }
+  const handleYearSelect = (e) => {
+    setYear(e.target.value)
+    updateDapickerUI(new Date(e.target.value, month, 1))
+  }
   const handlePreviousMonth = (e) => {
     const date = new Date(year, month, 1)
     setMonth(new Date(date.setMonth(date.getMonth() - 1)).getMonth())
