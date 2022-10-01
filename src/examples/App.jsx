@@ -1,6 +1,6 @@
 import './App.scss'
 import { useState } from 'react'
-import { Datepicker } from '../lib'
+import Datepicker from '../lib'
 
 const App = () => {
   const [dateOfBirth, setDateOfBirth] = useState('')
