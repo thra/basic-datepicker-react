@@ -17,31 +17,40 @@ export const ClassicExample = () => {
 	}
 	
 	return (
-		<section className='container'>
-			<form onSubmit={submit}>
-				<label htmlFor='birthdate'>Birthdate</label>
-				<input name='birthdate' type='text' onClick={show1} defaultValue={inputValue1}/>
-				{isShown1
-					? <Datepicker locale='en'
-					              hide={hide1}
-					              setInputValue={setInputValue1}
-					              currentSelectedValue={inputValue1}
-					              disableFuture={true}
-					/>
-					: null}
-				<label htmlFor='hired'>Hired</label>
-				
-				<input name='hired' type='text' onClick={show2} defaultValue={inputValue2}/>
-				{isShown2
-					? <Datepicker locale='en'
-					              hide={hide2}
-					              setInputValue={setInputValue2}
-					              currentSelectedValue={inputValue2}
-					/>
-					: null}
-				<input type='submit' value='Submit'/>
-			</form>
-		</section>
+		<div>
+			<h3>Classic</h3>
+			<section className='section basic'>
+				<form onSubmit={submit}>
+					
+					
+					<label htmlFor='birthdate'>Birthdate</label>
+					<input name='birthdate' type='text' onClick={show1} defaultValue={inputValue1}/>
+					{isShown1
+						? <Datepicker locale='en'
+						              hide={hide1}
+						              setInputValue={setInputValue1}
+						              currentSelectedValue={inputValue1}
+						              disableFuture={true}
+						/>
+						: null}
+					
+					
+					<label htmlFor='hired'>Hired</label>
+					<input name='hired' type='text' onClick={show2} defaultValue={inputValue2}/>
+					{isShown2
+						? <Datepicker locale='en'
+						              theme='dark'
+						              hide={hide2}
+						              setInputValue={setInputValue2}
+						              currentSelectedValue={inputValue2}
+						/>
+						: null}
+					
+					
+					<input type='submit' value='Submit'/>
+				</form>
+			</section>
+		</div>
 	
 	)
 }

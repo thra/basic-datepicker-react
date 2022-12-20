@@ -17,28 +17,41 @@ export const RHFExample = () => {
 	const submit = (data) => console.log(data)
 	
 	return (
-		<form onSubmit={handleSubmit(submit)}>
-			<label htmlFor='birthdate'>Birthdate</label>
-			<input onClick={show1} type='text' {...register('birthdate')}/>
-			{isShown1
-				? <Datepicker RHFinputName='birthdate'
-				              locale='en'
-				              hide={hide1}
-				              setInputValue={getInputValue}
-				              currentSelectedValue={getValues('birthdate')}
-				              disableFuture={true}/>
-				
-				: null}
-			<label htmlFor='hired'>Hired</label>
-			<input onClick={show2} type='text' {...register('hired')}/>
-			{isShown2
-				? <Datepicker RHFinputName='hired'
-				              locale='en'
-				              hide={hide2}
-				              setInputValue={getInputValue}
-				              currentSelectedValue={getValues('hired')}/>
-				: null}
-			<input type='submit' value='Submit'/>
-		</form>
+		<div>
+			<h3>With react-hook-form</h3>
+			<section className='section rhf'>
+				<form onSubmit={handleSubmit(submit)}>
+					
+					
+					<label htmlFor='birthdate'>Birthdate</label>
+					<input onClick={show1} type='text' {...register('birthdate')}/>
+					{isShown1
+						? <Datepicker RHFinputName='birthdate'
+						              locale='en'
+						              hide={hide1}
+						              setInputValue={getInputValue}
+						              currentSelectedValue={getValues('birthdate')}
+						              disableFuture={true}
+						              theme='dark'
+						/>
+						
+						: null}
+					
+					
+					<label htmlFor='hired'>Hired</label>
+					<input onClick={show2} type='text' {...register('hired')}/>
+					{isShown2
+						? <Datepicker RHFinputName='hired'
+						              locale='en'
+						              hide={hide2}
+						              setInputValue={getInputValue}
+						              currentSelectedValue={getValues('hired')}/>
+						: null}
+					
+					
+					<input type='submit' value='Submit'/>
+				</form>
+			</section>
+		</div>
 	)
 }
