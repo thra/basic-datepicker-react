@@ -7,7 +7,7 @@ import arrowRightDark from '../icons/arrow-dark/chevron_big_right.svg'
 import {useEffect, useRef, useState} from 'react'
 import {weekDays, dateFormat, years, months, handleSetDays} from './utils.js'
 
-const Datepicker = ({locale, theme = 'light', setInputValue, RHFinputName, currentSelectedValue, disableFuture, hide}) => {
+const Datepicker = ({locale = 'en', theme = 'light', setInputValue, RHFinputName, currentSelectedValue, disableFuture, hide}) => {
 	const [days, setDays] = useState(handleSetDays())
 	const [month, setMonth] = useState(new Date().getMonth())
 	const [year, setYear] = useState(new Date().getFullYear())
