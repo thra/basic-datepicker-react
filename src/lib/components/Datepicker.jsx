@@ -1,13 +1,21 @@
 import './Datepicker.scss'
 import React from 'react'
+import arrowRight from '../icons/arrow/chevron_big_right.svg'
+import arrowLeft from '../icons/arrow/chevron_big_left.svg'
+import arrowLeftDark from '../icons/arrow-dark/chevron_big_left.svg'
+import arrowRightDark from '../icons/arrow-dark/chevron_big_right.svg'
 import {useEffect, useRef, useState} from 'react'
 import {weekDays, dateFormat, years, months, handleSetDays} from './utils.js'
 
-const Datepicker = ({locale, setInputValue, RHFinputName, currentSelectedValue, disableFuture, hide}) => {
+const Datepicker = ({locale, theme = 'light', setInputValue, RHFinputName, currentSelectedValue, disableFuture, hide}) => {
 	const [days, setDays] = useState(handleSetDays())
 	const [month, setMonth] = useState(new Date().getMonth())
 	const [year, setYear] = useState(new Date().getFullYear())
+	const ref = useRef()
 	
+	useEffect(() => {
+		theme === 'dark' ? ref.current.setAttribute('theme', 'dark') : ref.current.setAttribute('theme', 'light')
+	}, [theme])
 	
 	// Update all states (month, year and days)
 	const updateDapickerUI = (value) => {
@@ -54,7 +62,7 @@ const Datepicker = ({locale, setInputValue, RHFinputName, currentSelectedValue, 
 	}
 	
 	// onclickoutside : https://blog.logrocket.com/detect-click-outside-react-component-how-to/
-	const ref = useRef()
+	
 	useEffect(() => {
 		const handleClickOutSide = (event) => {
 			if (ref.current && !ref.current.contains(event.target)) {
@@ -110,10 +118,13 @@ const Datepicker = ({locale, setInputValue, RHFinputName, currentSelectedValue, 
 			<section ref={ref} className='custom-date-picker-calendar'>
 				<nav className='calendar-header'>
 					<div
-						className='calendar-header-menu calendar-header-menu-button-left'
+						className='calendar-header-menu calendar-header-menu-button'
 						onClick={handlePreviousMonth}
 					>
-						{'<'}
+						{theme === 'light'
+							? <img alt='previous month' src={arrowLeft}/>
+							: <img alt='previous month' src={arrowLeftDark}/>
+						}
 					</div>
 					<select
 						className='calendar-header-menu'
@@ -136,10 +147,13 @@ const Datepicker = ({locale, setInputValue, RHFinputName, currentSelectedValue, 
 						))}
 					</select>
 					<div
-						className='calendar-header-menu calendar-header-menu-button-right'
+						className='calendar-header-menu calendar-header-menu-button'
 						onClick={handleNextMonth}
 					>
-						{'>'}
+						{theme === 'light'
+							? <img alt='previous month' src={arrowRight}/>
+							: <img alt='previous month' src={arrowRightDark}/>
+						}
 					</div>
 				</nav>
 				<section className='custom-date-picker-calendar-days'>
@@ -164,7 +178,6 @@ const Datepicker = ({locale, setInputValue, RHFinputName, currentSelectedValue, 
 					</div>
 				</section>
 			</section>
-			)}
 		</div>
 	)
 }
