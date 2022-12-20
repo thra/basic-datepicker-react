@@ -29,6 +29,7 @@ const Datepicker = ({locale, setInputValue, RHFinputName, currentSelectedValue, 
 			// callback => Name if using with react-hook-form-library
 			setInputValue(dateFormat(locale, new Date(date)), RHFinputName)
 		}
+		hide()
 	}
 	
 	const handleMonthSelect = (e) => {
