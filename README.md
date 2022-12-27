@@ -1,6 +1,7 @@
 # Basic Datepicker React
 
-A simple and basic reusable datepicker component using react
+A simple and basic reusable datepicker component built in typescript using react and compatible
+with <a href='https://www.npmjs.com/package/react-hook-form'><img src="https://img.shields.io/badge/-React%20Hook%20Form-111827?logo=React%20Hook%20Form&logoColor={LOGO-COLOR}style=For-the-badge" alt="badge sample"/> </a>
 
 No other third party libraries just only standard built-in Date objects
 
@@ -14,20 +15,27 @@ No other third party libraries just only standard built-in Date objects
 ## Installation
 
 ```
-npm install basic-datepicker-react
+npm i basic-datepicker-react
 ```
 
-## Classic Example 
+```
+yarn add basic-datepicker-react
+```
+
+```
+pnpm add basic-datepicker-react
+```
+
+## Example (classic)
 
 ```js
-import Datepicker from 'basic-datepicker-react'
-import { useState } from 'react'
+import {Datepicker} from 'basic-datepicker-react'
+import {useState} from 'react'
 
-export const ClassicExample = () => {
-	const [inputValue, setInputValue] = useState('')
+const Example = () => {
 	
-	// custom Hook to display datePicker (not provided)
-	const [isShown, {setTrue: show, setFalse: hide}] = useBoolean(false)
+	const [inputValue, setInputValue] = useState('')
+	const [open, setOpen] = useState(false)
 	
 	const submit = e => {
 		e.preventDefault()
@@ -36,78 +44,87 @@ export const ClassicExample = () => {
 	}
 	
 	return (
-  
-      <form onSubmit={submit}>
-					
-        <label htmlFor='birthdate'>Birthdate</label>
-        <input name='birthdate' type='text' onClick={show} defaultValue={inputValue}/>
-        {isShown
-          ? <Datepicker locale='en'
-                        hide={hide}
-                        setInputValue={setInputValue}
-                        currentSelectedValue={inputValue} />
-          : null}
-
-
-        <input type='submit' value='Submit'/>
-      </form>
-      
+		<form className='test' onSubmit={submit}>
+			<label htmlFor='birthdate'>Birthdate</label>
+			<input name='birthdate' type='text' onClick={() => setOpen(!open)} defaultValue={inputValue}/>
+			
+			{open
+				? <Datepicker locale='en'
+				              hide={() => setOpen(false)}
+				              setInputValue={setInputValue}
+				              disableFuture={true}
+				              theme='dark'
+				              currentSelectedValue={inputValue}/>
+				: null
+			}
+			
+			<input type='submit' value='Submit'/>
+		</form>
 	)
 }
+
+export default Example
 ```
-
-## Example with react-hook-form
-
-```js
-import Datepicker from 'basic-datepicker-react'
-import { useState } from 'react'
-import {useForm} from 'react-hook-form'
-
-export const RhfExample = () => {
-  const {register, handleSubmit, setValue, getValues} = useForm()
-  
-  //custom Hook to display datePicker (not provided)
-  const [isShown, {setTrue: show, setFalse: hide}] = useBoolean(false)
-	
-  //IMPORTANT the following function is mandatory to get input value from datePicker.
-  const getInputValue = (value, name) => {
-		setValue(name, value)
-	}
-  
-  const submit = (data) => console.log(data)
-	
-  return (
-    <form onSubmit={handleSubmit(submit)}>
-      <label htmlFor='birthdate'>Birthdate</label>
-      
-      <input onClick={show} type='text' {...register('birthdate')}/>
-          {isShown
-            ? <Datepicker RHFinputName='birthdate'
-                          hide={hide}
-                          setInputValue={getInputValue}
-                          currentSelectedValue={getValues('birthdate')}/>
-
-            : null}
-            
-      <input type='submit' value='Submit'/>
-    </form>
-
-    )
-}
-
-// RHFinputName prop is mandatory to tell the datepicker wich input is targeted
-```
-
-## Props Options:
-
-```js
-disableFuture={true}
-```
-To disable the selection of every days after today (Default is false)
 
 #
 
+## Example (with React-hook-form)
+
 ```js
-theme='dark'
+import {Datepicker} from 'basic-datepicker-react'
+import {useState} from 'react'
+import {useForm} from "react-hook-form";
+
+const Example = () => {
+	
+	const [isShown, setIsShown] = useState(false)
+	const {register, handleSubmit, setValue, getValues} = useForm()
+	
+	//IMPORTANT the following function is mandatory to get input value from datePicker. 
+	// You can copy/paste safely (we'll provide it in package later)
+	const getInputValue = (value, name) => {
+		setValue(name, value)
+	}
+	
+	const submit = (data) => console.log(data)
+	
+	return (
+		<form onSubmit={handleSubmit(submit)}>
+			<label htmlFor='birthdate'>Birthdate</label>
+			<input onClick={() => setIsShown(true)} type='text' {...register('birthdate')}/>
+			
+			{isShown
+				? <Datepicker RHFinputName='birthdate'
+				              hide={() => setIsShown(false)}
+				              disableFuture={true}
+				              setInputValue={getInputValue}
+				              currentSelectedValue={getValues('birthdate')}/>
+				
+				: null
+			}
+			
+			<input type='submit' value='Submit'/>
+		</form>
+	)
+}
+
+export default Example
 ```
-To display in dark-mode (Default is 'light'). You can use conditionnal rendering there to pluf it to your app dark/light mode
+
+### props:
+
+`RHFinputName` the string you use to target your input with RHF (only if you work with react-hook-form) | _**Optional**_
+
+`setInputValue` your setter fn to get input value (state setter without RHF or the getInputValue function with RHF)
+| _**Required**_
+
+`hide` your state setter | _**Required**_
+
+`locale` a string to set the format of the date in therm of your region | _**Optional**_
+
+`disableFuture` boolean to disable all days after today | _**Optional**_
+
+`theme` a string: 'light' by default or 'dark' | _**Optional**_
+
+`currentSelectedValue` your state to tell the datepicker if you reopen the day you've already selected | _**Optional**_
+
