@@ -1,19 +1,103 @@
 import './Datepicker.scss'
-import React from 'react'
+import React, {Dispatch, SetStateAction} from 'react'
 import {useEffect, useRef, useState} from 'react'
-import {weekDays, dateFormat, years, months, handleSetDays} from './utils'
+
+type DateValue = string | number | Date
+
+
+/**
+ * Returns a formatted string of a date object 'mm/dd/yyyy' in function of locales in param
+ * @param {String} locales BCP 47 see: https://fr.wiktionary.org/wiki/Wiktionnaire:BCP_47/language-2 example 'fr' or 'en-US'
+ * @param {Date} dateObject example: new Date('01/01/2020')
+ * @returns {String} 'mm/dd/yyyy' by default
+ */
+const dateFormat = (locales = 'en', dateObject = new Date()) =>
+    new Intl.DateTimeFormat(locales, {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+    }).format(dateObject)
+
+/**
+ * Fill and returns years array from 100 year before current year
+ * @returns {Array} [1922, 1923,...]
+ */
+const years = Array(150)
+    .fill(undefined)
+    .map((v = new Date().getFullYear() - 100, index) => v + index)
+
+/**
+ * Returns array of a week days starting to Sunday in function of locales param for translation
+ * @param {String} locales BCP 47 see https://fr.wiktionary.org/wiki/Wiktionnaire:BCP_47/language-2 example 'fr' or 'en-US'
+ * @returns {Array} array of string example for 'en' param : ['Sunday', Monday',...]
+ */
+const weekDays = (locales = 'en') => {
+    const startDate = new Date(1898, 11, 31)
+    const array = []
+    for (let i = 0; i < 7; i++) {
+        array.push(
+            new Date(startDate.setDate(startDate.getDate() + 1)).toLocaleString(
+                locales,
+                {weekday: 'long'}
+            )
+        )
+    }
+    return array
+}
+
+/**
+ * Returns array of month name starting to January in function of locales param for translation
+ * @param {String} locales BCP 47 see https://fr.wiktionary.org/wiki/Wiktionnaire:BCP_47/language-2 example 'fr' or 'en-US'
+ * @returns {Array} array of string example for 'en' param: ['January', 'February',...]
+ */
+const months = (locales = 'en') => {
+    const startDate = new Date(1898, 11, 1)
+    const array = []
+    for (let i = 0; i < 12; i++) {
+        array.push(
+            new Date(startDate.setMonth(startDate.getMonth() + 1)).toLocaleString(
+                locales,
+                {month: 'long'}
+            )
+        )
+    }
+    return array
+}
+
+/**
+ * By default init days calendar in function of current date
+ * @returns {Array} Array of String Date format 'mm/dd/yyyy' example ['09/01/2020', '09/02/2020',...]
+ */
+const handleSetDays = (value = new Date()) => {
+    const days = Array(42)
+    const firstDay = new Date(value.setDate(1))
+
+    // handle first Week
+    // complete start of the first week from first day of the month
+    for (let i = 0; i <= firstDay.getDay(); i++) {
+        const yesterday = new Date(
+            new Date(firstDay).setDate(firstDay.getDate() - i)
+        )
+        days[firstDay.getDay() - i] = dateFormat('en', yesterday)
+    }
+    // complete remainder of the days
+    for (let i = firstDay.getDay() + 1; i < days.length; i++) {
+        const tomorrow = new Date(firstDay.setDate(firstDay.getDate() + 1))
+        days[i] = dateFormat('en', tomorrow)
+    }
+    return days
+}
+
 
 type DatepickerProps = {
     locale?: string,
     theme?: string,
-    setInputValue: (value: Date | string | number, name?: string) => void,
+    setInputValue: Dispatch<SetStateAction<string>> | ((value: Date | string | number, name?: string) => void),
     RHFinputName?: string,
     currentSelectedValue?: string,
     disableFuture?: boolean,
     hide: () => void
 }
-
-type DateValue = string | number | Date
 
 
 const Datepicker = ({
@@ -25,7 +109,7 @@ const Datepicker = ({
                         disableFuture,
                         hide
                     }: DatepickerProps) => {
-    const [days, setDays] = useState<Date[]>(handleSetDays())
+    const [days, setDays] = useState(handleSetDays())
     const [month, setMonth] = useState<number>(new Date().getMonth())
     const [year, setYear] = useState<number>(new Date().getFullYear())
     const ref = useRef<HTMLDivElement>(null)
@@ -63,10 +147,12 @@ const Datepicker = ({
         updateDapickerUI(new Date(year, parseInt(e.target.value, 10), 1))
     }
 
-    const handleYearSelect = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-        setYear(parseInt(e.target.value))
-        updateDapickerUI(new Date(month, parseInt(e.target.value, 10), 1))
+    const handleYearSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = parseInt(e.target.value)
+        setYear(value)
+        updateDapickerUI(new Date(value, month, 1))
     }
+
     const handlePreviousMonth = () => {
         const date = new Date(year, month, 1)
         setMonth(new Date(date.setMonth(date.getMonth() - 1)).getMonth())
@@ -105,7 +191,7 @@ const Datepicker = ({
     }
 
 
-    const computeDayClassName = (index: number, value: number | Date): string => {
+    const computeDayClassName = (index: number, value: DateValue): string => {
         let className = 'week-day'
         const day = new Date(value).getDate()
         const allDays: Date = new Date(value)
@@ -139,7 +225,7 @@ const Datepicker = ({
                     <div
                         className='calendar-header-menu calendar-header-menu-button'
                         onClick={handlePreviousMonth}>
-                        ＜
+                        &laquo;
                     </div>
                     <select
                         className='calendar-header-menu'
@@ -165,7 +251,7 @@ const Datepicker = ({
                         className='calendar-header-menu calendar-header-menu-button'
                         onClick={handleNextMonth}
                     >
-                        ﹥
+                        &raquo;
                     </div>
                 </nav>
                 <section className='custom-date-picker-calendar-days'>
