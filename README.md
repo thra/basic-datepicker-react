@@ -1,7 +1,7 @@
 # Basic Datepicker React
 
 A simple and basic reusable datepicker component built in typescript using react and compatible
-with https://www.npmjs.com/package/react-hook-form
+with <a href='https://www.npmjs.com/package/react-hook-form'><img src="https://img.shields.io/badge/-React%20Hook%20Form-111827?logo=React%20Hook%20Form&logoColor={LOGO-COLOR}style=For-the-badge" alt="badge sample"/> </a>
 
 No other third party libraries just only standard built-in Date objects
 
